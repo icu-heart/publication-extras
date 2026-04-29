@@ -10,7 +10,7 @@ What is the incidence of myocardial infarction (MI) determined using artificial 
 #### Objectives
 * Assemble retrospective continuous cardiac monitoring data 
 * Remove/deal with artefact in data  
-* Validate use of 3-lead ECG when compared to 12-lead ECG for detection of ischaemia
+* Validate use of 5-lead ECG when compared to 12-lead ECG for detection of ischaemia
 * Identify MI in continuous cardiac monitoring  
 
 ## Methods
@@ -33,7 +33,7 @@ Other variables
 * Lab biomarker data: Troponin T, creatinine, NSE, potassium etc. From Apex/iLabs
 * Comorbidity information: label for cardiovascular disease derived from SMR01, Wardwatcher and Primary Care. Multimorbidity as identified in work package 1.
 * Bedspace occupation: from Wardwatcher
-* Admission and discharge dates: from SMR01
+* Admission and discharge dates: from ICCA/SMR01
 
 #### Outcomes
 Incidence of identified myocardial infarction 
@@ -42,27 +42,26 @@ Incidence of identified myocardial infarction
 The specific data sources are detailed in Table 1 of the overall application (found at the end of section D) and in the Data Selection Form.  
 
 ### Data management
-Data for this project will reside in the NHS Lothian safe-haven DataLoch and will be acquired from a range of data sources outlined above.  
+Data for this project will reside in the NHS Lothian safe-haven (DataLoch) and will be acquired from a range of data sources outlined above.  
 
 ## Analysis
 
 ### Data preparation, cleaning and noise removal
-The Mindray waveform data will be received in HL7 format, which will be unpacked before carrying out checks for data quality and completeness. The waveform data will then be cleaned and noise (e.g. power line interference and baseline wander) will be removed via filtering techniques in the frequency (Butterworth filter, notch filter, Fourier transform) and/or mixed time-frequency (discrete wavelet transform) domains. 
+The Mindray waveform data will be received in as a SQLite AtriumDB instance, unpacked from raw HL7 and pseudonymised by DataLoch. We will then carry out checks for data quality and completeness, before cleaning the data and removing noise (e.g. power line interference and baseline wander) via filtering techniques in the frequency (Butterworth filter, notch filter, Fourier transform) and/or mixed time-frequency (discrete wavelet transform) domains. 
 
 ### Segmentation of data
 Data will be split into segments, e.g. 10 second windows
 
 ### Addressing artefacts in the data
-Waveform artefacts are regions of data affected by confounding external factors, such as washing or moving the patient or taking blood tests. This alters the underlying waveform and will interfere with model development. 
-Statistical methods will be developed to identify (and classify) segments including artefacts and they will be discarded.
+Waveform artefacts are regions of data affected by confounding external factors, such as washing or moving the patient, or taking blood tests. This alters the underlying waveform and will interfere with model development. Statistical methods will be developed to identify (and classify) segments including artefacts and they will be discarded.
 
 ### Feature extraction
 A range of features and feature extraction techniques will be explored, including
 * Morphological features of the waveform (locations and amplitudes of PQRST, areas, slopes, skew and kurtosis), with special attention given to the ST segment, which is known to be indicative of ischaemia
 * Statistical signal features such as power, mean, variance and higher order statistics as well as measures of complexity like entropy, Lyapunov exponents and autocorrelation
-* Measures of heart rate variability; the RR interval and derivatives
+* Measures of heart rate variability: the RR interval and derivatives
 * Frequency information from the power spectrum and wavelet filter banks
-* Wavelet transform (for simultaneous time-frequency information), either specific coefficients from discrete wavelet transform or spectrograms from continuous wavelet transform
+* Wavelet transform (for simultaneous time-frequency information): either specific coefficients from discrete wavelet transform or spectrograms from continuous wavelet transform
 * Signal decomposition and extraction of eigenvalues (principal components analysis, independent components analysis, empirical mode decomposition)
 * Deep features from machine learning, e.g. autoencoder latent space or use of convolutional or recurrent neural networks
 
@@ -81,7 +80,7 @@ We will visualise patient feature trajectories, quantify morphological change an
 We will use information from our change quantification output, alongside baseline or endpoint features, to identify MI. We will investigate a range of techniques including 
 * A statistical assessment of the feature trajectory e.g. applying thresholds for ischaemia or looking for points of inflection
 * Unsupervised learning such as clustering of patients and labelling of clusters based on expert assessment in conjunction with 12-lead ECG from MUSE and/or lab biomarker data  
-* Classification of e.g. “MI” vs “no-MI”, or types of MI/ischaemia by statistical models (e.g. logistic regression) and AI models (e.g. support vector machines, random forests and neural networks)
+* Classification of e.g. "MI" vs "no-MI", or types of MI/ischaemia by statistical models (e.g. logistic regression) and AI models (e.g. support vector machines, random forests and neural networks)
 
 
 
